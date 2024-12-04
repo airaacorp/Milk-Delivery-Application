@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>Images/account.png</file>
+        <file>signup.qml</file>
+        <file>Images/flag.png</file>
+        <file>Images/splash.png</file>
+        <file>Images/back.png</file>
+        <file>otp.qml</file>
+    </qresource>
+</RCC>
