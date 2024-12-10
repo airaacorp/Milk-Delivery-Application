@@ -6,6 +6,6 @@
         <file>Images/flag.png</file>
         <file>Images/splash.png</file>
         <file>Images/back.png</file>
-        <file>otp.qml</file>
+        <file>Otp.qml</file>
     </qresource>
 </RCC>
