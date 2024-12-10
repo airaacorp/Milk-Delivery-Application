@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Dialogs 1.3
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 Item {
     id: signIn
@@ -8,121 +9,126 @@ Item {
     height: 600
     visible: true
 
-    Text {
-        text: "Signup"
-        x: 32
-        y: 130
-        font.pointSize: 18
-        color: "black"
-    }
-
-    Loader {
-        id: loader1
+    ColumnLayout {
         anchors.fill: parent
-        source: "" // Ensure default source is empty
-    }
+        spacing: 20
+        anchors.margins: 16 // Adds padding around the content
 
-    Rectangle {
-        width: 320
-        height: 60
-        x: 41
-        y: 180
-        color: "white"
-        radius: 10
-        border.color: "lightgray"
-        border.width: 1
-        Row {
-            anchors.centerIn: parent
-            spacing: 10
+        // Title Text
+        Text {
+            text: "Signup"
+            font.pointSize: 18
+            color: "black"
+            Layout.alignment: Qt.AlignHCenter
+        }
 
-            Image {
-                id: imgFlag
-                height: 40
-                width: 60
-                source: "qrc:/Images/flag.png"
-            }
+        // Input Field Container
+        Rectangle {
+            Layout.alignment: Qt.AlignHCenter
+            width: parent.width * 0.8
+            height: parent.height * 0.1
+            color: "white"
+            radius: 10
+            border.color: "lightgray"
+            border.width: 1
 
-            Rectangle {
-                width: 1
-                height: 40
-                color: "lightgray"
-                anchors.verticalCenter: imgFlag.verticalCenter
-            }
+            RowLayout {
+                anchors.fill: parent
+                spacing: 10
+                anchors.margins: 10
 
-            TextField {
-                id: phoneNumberField
-                height: 40
-                width: 220
-                placeholderText: "Enter phone number"
-                placeholderTextColor: activeFocus ? "transparent" : "#AAAAAA"
-                font.pixelSize: 20
-                opacity: 0.8
+                Image {
+                    id: imgFlag
+                    width: parent.width * 0.2
+                    height: width * 0.666 // Maintains aspect ratio
 
-                // Ensure only digits are entered
-                inputMethodHints: Qt.ImhDigitsOnly
-                validator: RegExpValidator {
-                    regExp: /^([6-9])[0-9]{9}$/ // Allows valid 10-digit phone numbers starting with 6-9
+                    source: "qrc:/Images/flag.png"
+                    Layout.alignment: Qt.AlignVCenter
+
                 }
 
-                onTextChanged: {
-                    const valid = text.match(/^([6-9])[0-9]{0,9}$/);
-                    if (!valid) {
-                        text = text.slice(0, -1); // Remove invalid character
+                Rectangle {
+                    width: 1
+                    height: parent.height * 0.6
+                    color: "lightgray"
+                    Layout.alignment: Qt.AlignVCenter
+                }
+
+                TextField {
+                    id: phoneNumberField
+                    Layout.fillWidth: true
+                    placeholderText: "Enter phone number"
+                    placeholderTextColor: activeFocus ? "transparent" : "#AAAAAA"
+                    font.pixelSize: 20
+                    opacity: 0.8
+
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    validator: RegExpValidator {
+                        regExp: /^([6-9])[0-9]{9}$/
+                    }
+
+                    onTextChanged: {
+                        const valid = text.match(/^([6-9])[0-9]{0,9}$/);
+                        if (!valid) {
+                            text = text.slice(0, -1); // Remove invalid character
+                        }
                     }
                 }
             }
         }
-    }
 
-    Column {
-        x: 25
-        y: 560
-        anchors.horizontalCenter: parent.horizontalCenter
-        spacing: 5
-        Text {
-            text: "    By continuing, you agree to our"
-            font.pixelSize: 14
-            color: "black"
-            horizontalAlignment: Text.AlignHCenter
+        // Continue Button
+        Button {
+            id: button2
+            Layout.alignment: Qt.AlignHCenter
+            // width: parent.width * 0.20
+            // height: parent.height * 0.1
+            enabled: phoneNumberField.text.length === 10
+            text: "Continue"
+            font.bold: true
+            font.pointSize: 14
+
+            background: Rectangle {
+                color: enabled ? "#227FC0" : "gray"
+                radius: 10
+                width: parent.width * 3.50
+                height: parent.height * 1.95
+                anchors.centerIn: parent
+            }
+
+            onClicked: {
+                if (!enabled) return;
+                loader1.source = "otp.qml";
+                signIn.visible = false;
+            }
         }
-        Row {
+
+        // Terms and Conditions Text
+        ColumnLayout {
+            Layout.alignment: Qt.AlignHCenter
             spacing: 5
+
+            Text {
+                text: "By continuing, you agree to our"
+                font.pixelSize: 14
+                color: "black"
+                horizontalAlignment: Text.AlignHCenter
+            }
+
             Text {
                 text: "Terms of Service and Privacy Policy"
                 font.pixelSize: 14
                 font.bold: true
                 color: "black"
-              font.underline: true
+                font.underline: true
+                horizontalAlignment: Text.AlignHCenter
             }
-
         }
     }
 
-    Button {
-        id: button2
-        width: 360
-        height: 67
-        anchors.horizontalCenter: parent.horizontalCenter
-        y: 470
-        enabled: phoneNumberField.text.length === 10 // Button is enabled only when text length is 10
-        Text {
-            id: name
-            text: qsTr("Continue")
-            font.bold: true
-            color: "white"
-            font.pointSize: 14
-            anchors.centerIn: parent
-        }
-
-        background: Rectangle {
-            color: enabled ? "#227FC0" : "gray" // Change color based on enabled state
-            radius: 10
-        }
-
-        onClicked: {
-            if (!enabled) return; // Safety check, even though the button should already be disabled
-            loader1.source = "otp.qml"; // Ensure otp.qml exists and is accessible
-            signIn.visible = false;
-        }
+    Loader {
+        id: loader1
+        anchors.fill: parent
+        source: "" // Default source empty
     }
 }
