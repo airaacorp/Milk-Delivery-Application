@@ -65,13 +65,13 @@ Window {
             }
         }
 
-        // Timer {
-        //     interval: 2000; running: true; repeat: false
-        //     onTriggered: {
-        //         mainContent.visible = false
-        //         loader.source = "signup.qml"
-        //     }
-        // }
+        Timer {
+            interval: 2000; running: true; repeat: false
+            onTriggered: {
+                mainContent.visible = false
+                loader.source = "signup.qml"
+            }
+        }
     }
 }
 
